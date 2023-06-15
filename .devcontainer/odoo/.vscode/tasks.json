@@ -1,0 +1,58 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "mrbob - odoo:addon",
+            "type": "shell",
+            "command": "cd ${env:PATH_ODOO}/custom_addons/;mrbob bobtemplates.odoo:addon",
+            "problemMatcher": [],
+            "presentation": {
+                "focus": true,
+            },
+        },
+        {
+            "label": "mrbob - odoo:model",
+            "type": "shell",
+            "command": "addon=${relativeFileDirname};addon=${addon#*custom_addons/};addon=${addon%%/*};echo ${addon};cd ${env:PATH_ODOO}/custom_addons/${addon};mrbob bobtemplates.odoo:model",
+            "problemMatcher": [],
+            "presentation": {
+                "focus": true,
+            },
+        },
+        {
+            "label": "mrbob - odoo:test",
+            "type": "shell",
+            "command": "addon=${relativeFileDirname};addon=${addon#*custom_addons/};addon=${addon%%/*};echo ${addon};cd ${env:PATH_ODOO}/custom_addons/${addon};mrbob bobtemplates.odoo:test",
+            "problemMatcher": [],
+            "presentation": {
+                "focus": true,
+            },
+        },
+        {
+            "label": "mrbob - odoo:wizard",
+            "type": "shell",
+            "command": "addon=${relativeFileDirname};addon=${addon#*custom_addons/};addon=${addon%%/*};echo ${addon};cd ${env:PATH_ODOO}/custom_addons/${addon};mrbob bobtemplates.odoo:wizard",
+            "problemMatcher": [],
+            "presentation": {
+                "focus": true,
+            },
+        },
+        {
+            "label": "Create new custom addon",
+            "type": "shell",
+            "command": "${env:PATH_ODOO}/odoo/odoo-bin scaffold ${input:addon-name} ${env:PATH_ODOO}/custom_addons/",
+            "problemMatcher": [],
+        }
+    ],
+    "inputs": [
+        {
+            "id": "addon-name",
+            "type": "promptString",
+            "description": "Input a new addon module name.",
+            "default": "module_name",
+        }
+
+    ],
+}

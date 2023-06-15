@@ -1,0 +1,47 @@
+version: '2'
+services:
+  app:
+    image: "odoo-addons-dev:16.0"
+    container_name: "app"
+    build:
+      context: "."
+      dockerfile: odoo/Dockerfile
+      args:
+        # Update 'ODOO_VERSION' to pick a odoo version: master, 13.0, 14.0, 15.0, 16.0
+        ODOO_VERSION: "16.0"
+        SUPPORT_RTLCSS: "true"
+        # Update 'VARIANT' to pick a Python version: 3, 3.6, 3.7, 3.8, 3.9
+        VARIANT: "3.9"
+    volumes:
+      - ./odoo/.vscode:/opt/odoo/.vscode:cached
+      - ..:/opt/odoo/custom_addons:cached
+      - odoo-data:/opt/odoo/data
+    env_file:
+      - ./odoo/odoo.env
+    depends_on: 
+      - db
+      - lb
+    tty: true
+    command: bash
+    entrypoint: /opt/odoo/entrypoint.sh
+  db:
+    image: postgres:11
+    container_name: "db"
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_PASSWORD=odoo
+      - POSTGRES_USER=odoo
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+  lb:
+    image: nginx
+    container_name: "lb"
+    volumes:
+    - ./nginx/conf.d:/etc/nginx/conf.d:cached
+    ports:
+    - 80:80
+volumes:
+  odoo-data:
+  postgres-data:
